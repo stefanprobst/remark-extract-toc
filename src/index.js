@@ -15,7 +15,9 @@ function attacher() {
       const heading = {
         depth: node.depth,
         value: toString(node),
-        id: node.data && node.data.id,
+      }
+      if (node.data !== undefined && node.data.id != null) {
+        heading.id = node.data.id
       }
       headings.push(heading)
     }

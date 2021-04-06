@@ -1,6 +1,6 @@
 {
   "name": "@stefanprobst/remark-extract-toc",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "src/index.js",
   "repository": "https://github.com/stefanprobst/remark-extract-toc.git",
   "author": "Stefan Probst <stefanprobst@kolabnow.com>",
