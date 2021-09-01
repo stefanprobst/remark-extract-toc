@@ -1,12 +1,14 @@
-const fs = require('fs')
-const path = require('path')
-const fromMarkdown = require('remark-parse')
-const withSlugs = require('remark-slug')
-const toMarkdown = require('remark-stringify')
-const unified = require('unified')
-const withToc = require('../src')
+import * as fs from 'fs'
+import * as path from 'path'
 
-const fixture = fs.readFileSync(path.join(__dirname, 'fixtures/test.md'), {
+import fromMarkdown from 'remark-parse'
+import withSlugs from 'remark-slug'
+import toMarkdown from 'remark-stringify'
+import { unified } from 'unified'
+
+import withToc from '../src'
+
+const fixture = fs.readFileSync(path.resolve('./test/fixtures/test.md'), {
   encoding: 'utf-8',
 })
 

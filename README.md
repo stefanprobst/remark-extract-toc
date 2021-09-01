@@ -12,9 +12,9 @@ yarn add @stefanprobst/remark-extract-toc
 ## How to use
 
 ```js
-const remark = require("remark")
-const withSlugs = require("remark-slug")
-const withToc = require("@stefanprobst/remark-extract-toc")
+import { remark } from 'remark'
+import withSlugs from 'remark-slug'
+import withToc from '@stefanprobst/remark-extract-toc'
 
 const processor = remark().use(withSlugs).use(withToc)
 

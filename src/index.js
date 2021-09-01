@@ -1,7 +1,7 @@
-const toString = require('mdast-util-to-string')
-const visit = require('unist-util-visit')
+import { toString } from 'mdast-util-to-string'
+import { visit } from 'unist-util-visit'
 
-function attacher() {
+export default function attacher() {
   return transformer
 
   function transformer(tree, vfile) {
@@ -47,5 +47,3 @@ function attacher() {
     }
   }
 }
-
-module.exports = attacher
