@@ -1,6 +1,6 @@
 {
   "name": "@stefanprobst/remark-extract-toc",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "main": "src/index.js",
   "type": "module",
   "types": "src/index.d.ts",
@@ -8,7 +8,7 @@
   "author": "Stefan Probst <stefanprobst@kolabnow.com>",
   "license": "MIT",
   "engines": {
-    "node": "14.x",
+    "node": ">=14.17",
     "yarn": "1.x"
   },
   "scripts": {
