@@ -5,12 +5,22 @@ import fromMarkdown from 'remark-parse'
 import withSlugs from 'remark-slug'
 import toMarkdown from 'remark-stringify'
 import { unified } from 'unified'
+import { compile } from 'xdm'
 
-import withToc from '../src'
+import withToc from '../src/index'
+import withTocExport from '../src/mdx'
 
-const fixture = fs.readFileSync(path.resolve('./test/fixtures/test.md'), {
-  encoding: 'utf-8',
-})
+const fixtures = {
+  basic: fs.readFileSync(path.join(path.resolve('./test/fixtures/test.md')), {
+    encoding: 'utf-8',
+  }),
+  empty: fs.readFileSync(path.join(path.resolve('./test/fixtures/empty.md')), {
+    encoding: 'utf-8',
+  }),
+  mdx: fs.readFileSync(path.join(path.resolve('./test/fixtures/test.mdx')), {
+    encoding: 'utf-8',
+  }),
+}
 
 function createProcessor(includeSlugs = true) {
   const processor = unified()
@@ -22,7 +32,7 @@ function createProcessor(includeSlugs = true) {
 }
 
 it('should attach table of contents to vfile data', async () => {
-  const { data } = await createProcessor().process(fixture)
+  const { data } = await createProcessor().process(fixtures.basic)
 
   expect(data.toc).toMatchInlineSnapshot(`
     Array [
@@ -108,7 +118,7 @@ it('should attach table of contents to vfile data', async () => {
 })
 
 it('should not include id property for missing ids', async () => {
-  const { data } = await createProcessor(false).process(fixture)
+  const { data } = await createProcessor(false).process(fixtures.basic)
 
   expect(data.toc).toMatchInlineSnapshot(`
     Array [
@@ -178,4 +188,39 @@ it('should not include id property for missing ids', async () => {
       },
     ]
   `)
+})
+
+it('should return empty array when no headings found', async () => {
+  const { data } = await createProcessor().process(fixtures.empty)
+  expect(data.toc).toMatchInlineSnapshot(`Array []`)
+})
+
+it('should add named export to mdx document', async () => {
+  const file = await compile(fixtures.mdx, {
+    remarkPlugins: [withSlugs, withToc, withTocExport],
+  })
+  const data = file.data
+
+  expect(data.toc).toHaveLength(1)
+  expect(String(file)).toMatch(/export const tableOfContents/)
+})
+
+it('should allow custom named export in mdx document', async () => {
+  const file = await compile(fixtures.mdx, {
+    remarkPlugins: [withSlugs, withToc, [withTocExport, { name: 'toc' }]],
+  })
+  const data = file.data
+
+  expect(data.toc).toHaveLength(1)
+  expect(String(file)).toMatch(/export const toc/)
+})
+
+it('should throw when invalid identifier name provided as named export', async () => {
+  await expect(async () =>
+    compile(fixtures.mdx, {
+      remarkPlugins: [withSlugs, withToc, [withTocExport, { name: '##toc##' }]],
+    }),
+  ).rejects.toThrow(
+    /The name should be a valid identifier name, got: "##toc##"/,
+  )
 })
