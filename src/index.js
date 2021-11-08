@@ -9,7 +9,7 @@ export default function attacher() {
 
     visit(tree, 'heading', onHeading)
 
-    vfile.data.toc = createTree(headings)
+    vfile.data.toc = createTree(headings) || []
 
     function onHeading(node) {
       const heading = {
