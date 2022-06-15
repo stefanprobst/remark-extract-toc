@@ -1,11 +1,11 @@
 import * as fs from 'fs'
 import * as path from 'path'
 
+import { compile } from '@mdx-js/mdx'
 import fromMarkdown from 'remark-parse'
 import withSlugs from 'remark-slug'
 import toMarkdown from 'remark-stringify'
 import { unified } from 'unified'
-import { compile } from 'xdm'
 
 import withToc from '../src/index'
 import withTocExport from '../src/mdx'
@@ -220,7 +220,5 @@ it('should throw when invalid identifier name provided as named export', async (
     compile(fixtures.mdx, {
       remarkPlugins: [withSlugs, withToc, [withTocExport, { name: '##toc##' }]],
     }),
-  ).rejects.toThrow(
-    /The name should be a valid identifier name, got: "##toc##"/,
-  )
+  ).rejects.toThrow(/The name should be a valid identifier name, got: "##toc##"/)
 })
